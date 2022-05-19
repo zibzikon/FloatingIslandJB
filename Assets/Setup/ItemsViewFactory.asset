@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85a637cccfb34949ad9da63c92a54828, type: 3}
+  m_Name: ItemsViewFactory
+  m_EditorClassIdentifier: 
+  _empty: {fileID: 11400000, guid: 3b916aca8d87ea940b4b1060bac92bd1, type: 2}
+  _stone: {fileID: 11400000, guid: 88af6b28f891e24459eb66b1aeaf377f, type: 2}
+  _wood: {fileID: 11400000, guid: 84c731c9ff19b2949a81ab8dd6f02288, type: 2}
