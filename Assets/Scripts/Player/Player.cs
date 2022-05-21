@@ -5,7 +5,7 @@ using Factories.Container;
 using Container;
 using UnityEngine;
 
-public sealed class Player: MonoBehaviour, IUpdatable, IStartable
+public sealed class Player: MonoBehaviour, IPlayer, IUpdatable, IStartable
 {
     
     [SerializeField] private ItemsContainerFactory _inventoryFactory;
@@ -27,6 +27,7 @@ public sealed class Player: MonoBehaviour, IUpdatable, IStartable
     
 
     public void Initialize(Transform plyerUi)
+    
     {
         _inventory = new Inventory(_inventoryFactory);
         _inventory.GenerateInventory();

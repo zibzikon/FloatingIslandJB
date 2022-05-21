@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Factories.Building;
 using UnityEngine;
 
-public abstract class Building : MonoBehaviour , IStartable, IRecyclable
+public class Building : MonoBehaviour , IStartable, IRecyclable
 {
     [SerializeField]
     private CollisionObject _collisionObject;
@@ -11,21 +11,20 @@ public abstract class Building : MonoBehaviour , IStartable, IRecyclable
     {
         get
         {
-            if (_collisionObject.Parent != null && _collisionObject.Parent != this) throw new InvalidOperationException("Collision parent dont equals true parent object");
+            if (_collisionObject.Parent != null && _collisionObject.Parent != this) 
+                throw new InvalidOperationException("Collision parent dont equals true parent object");
             return _collisionObject;
         }
-    } 
-
-    public abstract BuildingType BuildingType { get; }
-
-    public BuildingFactory OriginFactory { get; set; }
-
-    private Building _supportBuilding;
-    public Building SupportBuilding { get => _supportBuilding; }
+    }
+    
+    [SerializeField] private BuildingType _buildingType;
+    public BuildingType BuildingType => _buildingType;
+    
+    public Building SupportBuilding { get; private set; }
 
     public void SetSupportBuilding(BuildingWithChilds supportBuilding, Vector3 position)
     {
-        _supportBuilding = supportBuilding;
+        SupportBuilding = supportBuilding;
         this.transform.position = position;
     }
 

@@ -30,7 +30,6 @@ namespace Factories.Building
         private global::Building GetNewBuilding(global::Building prefab)
         {
             var instance = Instantiate(prefab);
-            instance.OriginFactory = this;
             return instance;
         }
 
