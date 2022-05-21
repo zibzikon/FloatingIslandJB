@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-public class GameField : MonoBehaviour, IStartable
+public class GameField : MonoBehaviour
 {
     private Cell[] _cells;
     private Vector3Int _size = new (10, 10, 10); 
-    public void OnStart()
+    private void Start()
     {
         GenerateGameField();
     }

@@ -118,7 +118,6 @@
      <Compile Include="Assets\Scripts\GameField\Сell.cs" />
      <Compile Include="Assets\Scripts\Container\Models\ItemsContainer.cs" />
      <Compile Include="Assets\Scripts\Building\BuildPoint.cs" />
-     <Compile Include="Assets\Interfaces\IStartable.cs" />
      <Compile Include="Assets\Scripts\Enums\ItemType.cs" />
      <Compile Include="Assets\Scripts\Neighbors.cs" />
      <Compile Include="Assets\Scripts\Factories\Container\ItemsContainerCellStateViewFactory.cs" />

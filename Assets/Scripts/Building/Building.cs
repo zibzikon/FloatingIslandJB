@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Factories.Building;
 using UnityEngine;
 
-public class Building : MonoBehaviour , IStartable, IRecyclable
+public class Building : MonoBehaviour , IRecyclable
 {
     [SerializeField]
     private CollisionObject _collisionObject;
@@ -27,12 +27,7 @@ public class Building : MonoBehaviour , IStartable, IRecyclable
         SupportBuilding = supportBuilding;
         this.transform.position = position;
     }
-
-    public virtual void OnStart()
-    {
-        throw new NotImplementedException();
-    }
-
+    
     public void Recycle()
     {
         Destroy(this.gameObject);

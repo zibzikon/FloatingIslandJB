@@ -18,7 +18,7 @@ public class BuildingWithChilds : Building, IUpdatable
         BuildingType.Wall
     };
 
-    public override void OnStart()
+    private void Start()
     {
         InitializeBuildPoints();
     }

@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-public class GameInitializer : MonoBehaviour, IUpdatable, IStartable
+public class GameInitializer : MonoBehaviour, IUpdatable
 {
     [SerializeField]
     private Player _playerPrefab;
@@ -20,17 +20,16 @@ public class GameInitializer : MonoBehaviour, IUpdatable, IStartable
     
     private void Start()
     {
-        OnStart();
+        Initialize();
     }
     
-    public void OnStart()
+    public void Initialize()
     {
         var mainUI = Instantiate(_mainUIPrefab, _generalCanvas.transform);
         mainUI.Initialize(_player);
         
         _player = Instantiate(_playerPrefab);
         _player.Initialize(mainUI.transform);
-        _player.OnStart();
     }
 
     public void OnUpdate()

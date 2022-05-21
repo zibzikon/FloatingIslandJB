@@ -5,7 +5,7 @@ using Factories.Container;
 using Container;
 using UnityEngine;
 
-public sealed class Player: MonoBehaviour, IPlayer, IUpdatable, IStartable
+public sealed class Player: MonoBehaviour, IPlayer, IUpdatable
 {
     
     [SerializeField] private ItemsContainerFactory _inventoryFactory;
@@ -40,12 +40,7 @@ public sealed class Player: MonoBehaviour, IPlayer, IUpdatable, IStartable
         
         _playerViewModel.Initialize(_inventory, plyerUi.transform);
         _contentToUpdate.Add(_playerViewModel);
-    } 
-    public void OnStart()
-    {
-        _builder.OnStart();
     }
-
     public void OnUpdate()
     {
         foreach (var content in _contentToUpdate)

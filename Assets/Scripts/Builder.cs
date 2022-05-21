@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-sealed class Builder : IUpdatable, IStartable
+sealed class Builder : IUpdatable
 {
     private BuilderBehaviour _builderBehaviour;
     
     public Builder(BuilderBehaviour builderBehaviour)
     {
         _builderBehaviour = builderBehaviour;
-    }
-    public void OnStart()
-    {
     }
 
     public void OnUpdate()

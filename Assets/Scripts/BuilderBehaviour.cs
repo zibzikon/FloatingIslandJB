@@ -67,7 +67,6 @@ public class BuilderBehaviour : IUpdatable
     public void SpawnBuilding(BuildingType type)
     {
         _currentBuilding = _buildingFactory.GetNewBuilding(type);
-        _currentBuilding.OnStart();
         if (BuildingWithChilds.IsBuildingWithChilds(_currentBuilding)) _buildingsToUpdate.Add((BuildingWithChilds)_currentBuilding);
     }
 
