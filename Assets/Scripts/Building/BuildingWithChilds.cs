@@ -2,26 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-[RequireComponent(typeof(Neighbors<List<BuildPoint>>))]
+[RequireComponent(typeof(BuildPoints))]
 public class BuildingWithChilds : Building, IUpdatable
 {
     public Neighbors<List<BuildPoint>> BuildPoints { get; private set; }
     
-    private void InitializeBuildPoints()
-    {
-        BuildPoints = GetComponent<Neighbors<List<BuildPoint>>>();
-    }
-
-    public static readonly IEnumerable<BuildingType> BuildingTypesWithChilds = new[]
+    private static readonly IEnumerable<BuildingType> BuildingTypesWithChilds = new[]
     {
         BuildingType.SupportPillar,
         BuildingType.Wall
     };
 
-    private void Start()
+    private void Awake()
     {
-        InitializeBuildPoints();
+        BuildPoints = GetComponent<BuildPoints>().Points;
     }
+
     public virtual void OnUpdate()
     {
     }

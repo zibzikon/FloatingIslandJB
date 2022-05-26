@@ -9,7 +9,10 @@ public static class EnumerableExtentions
     {
         foreach (var behaviour in monoBehaviours)
         {
-            UnityEngine.Object.Destroy(behaviour);
+            if (behaviour != null && behaviour.gameObject != null )
+            {          
+                UnityEngine.Object.Destroy(behaviour.gameObject);
+            }
         }
     }
 }

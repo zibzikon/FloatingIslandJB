@@ -231,7 +231,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7286285744365930092}
   - component: {fileID: 7286285744365930095}
-  - component: {fileID: 8078618278569139086}
   - component: {fileID: 3225395692419124023}
   - component: {fileID: 2161571018969545148}
   m_Layer: 0
@@ -274,21 +273,8 @@ MonoBehaviour:
   _buildingFactory: {fileID: 11400000, guid: c391919aa42ef1042b717f28172253ba, type: 2}
   _buildingPointersFactory: {fileID: 11400000, guid: 59a2ca8cb35783e418eba84a5029604c,
     type: 2}
-  _playerViewModel: {fileID: 8078618278569139086}
+  _playerViewModel: {fileID: 0}
   _playerWithWorldInteraction: {fileID: 3225395692419124023}
---- !u!114 &8078618278569139086
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7286285744365930094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dcdac9c82dba45f5920ccf55403e0018, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _inventoryViewModel: {fileID: 3497665288922310396}
 --- !u!114 &3225395692419124023
 MonoBehaviour:
   m_ObjectHideFlags: 0

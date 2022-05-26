@@ -22,11 +22,6 @@ namespace Factories.Building
             throw new NullReferenceException();
         }
 
-        public void DestroyBuilding(global::Building building)
-        {
-            Destroy(building);
-        }
-
         private global::Building GetNewBuilding(global::Building prefab)
         {
             var instance = Instantiate(prefab);

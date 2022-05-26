@@ -1,29 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Extentions;
 using Factories.Building;
 using UnityEngine;
 
-public class BuilderBehaviour : IUpdatable
-
+public class BuilderBehaviour : IUpdatable, IRecyclable
 {
     private Camera _mainCamera;
 
+    private GameField.GameField _gameField;
+    
     private BuildingFactory _buildingFactory;
 
     private readonly List<IUpdatable> _buildingsToUpdate = new();
 
     private Building _currentBuilding;
     private Building _selectedBuilding;
-
-
+    
     private BuildingPointersFactory _buildingPointersFactory;
 
     private BuildingPointer _selectedBuildingPointer;
-    private List<BuildingPointer> _spawnedPointers;
-    private bool _currentBuildingIsReadyToSet => _selectedBuilding != null && _selectedBuildingPointer != null;
-    public BuilderBehaviour(BuildingFactory buildingFactory, BuildingPointersFactory buildingPointersFactory, Camera mainCamera)
+    private List<BuildingPointer> _spawnedPointers = new();
+    private bool _currentBuildingIsReadyToSet => CheckBuildingSettingAvialible();
+    public bool BuildingWasSpawned => _currentBuilding != null;
+  
+    public BuilderBehaviour(GameField.GameField gameField,BuildingFactory buildingFactory, 
+        BuildingPointersFactory buildingPointersFactory, Camera mainCamera)
     {
+        _gameField = gameField;
         _buildingFactory = buildingFactory;
         _buildingPointersFactory = buildingPointersFactory;
         _mainCamera = mainCamera;
@@ -46,11 +51,17 @@ public class BuilderBehaviour : IUpdatable
                 DeclineSettingBuilding();
             }
             else if ( Input.GetMouseButtonDown(0) && _selectedBuilding == null)
-            {
-                _selectedBuilding = SelectItem()?.GetComponent<BuildingWithChilds>();
-                if (_selectedBuilding != null)
+            {            
+
+                var selectedBuilding= SelectItem()?.GetComponent<BuildingWithChilds>();
+                if (selectedBuilding != null && selectedBuilding != _currentBuilding)
                 {
+                    _selectedBuilding = selectedBuilding;
                     OnBuildingSelected();
+                }
+                else
+                {
+                    SetCurrentBuildingPosition();
                 }
             }
             else if (Input.GetMouseButtonDown(0) && _selectedBuilding != null && _selectedBuildingPointer == null)
@@ -66,8 +77,13 @@ public class BuilderBehaviour : IUpdatable
 
     public void SpawnBuilding(BuildingType type)
     {
+        if (_currentBuilding != null)
+        {
+            throw new InvalidOperationException();
+        }
         _currentBuilding = _buildingFactory.GetNewBuilding(type);
-        if (BuildingWithChilds.IsBuildingWithChilds(_currentBuilding)) _buildingsToUpdate.Add((BuildingWithChilds)_currentBuilding);
+        if (BuildingWithChilds.IsBuildingWithChilds(_currentBuilding)) 
+            _buildingsToUpdate.Add((BuildingWithChilds)_currentBuilding);
     }
 
     private List<BuildingPointer> SpawnBuiildingPointers(BuildingWithChilds building)
@@ -75,15 +91,17 @@ public class BuilderBehaviour : IUpdatable
         var buildingTrueSize = building.GetComponent<MeshRenderer>().bounds.size;
         var buildingTrueCenterPosition = building.GetComponent<MeshRenderer>().bounds.center;
         var builingPointers = new List<BuildingPointer>();
+        
         foreach (var direction in DirectionExtentions.GetDirectionEnumerable())
             if (GetCorrectBuildingBuildPoint(building, _currentBuilding, direction) != null)
-                builingPointers.Add(_buildingPointersFactory.GetNewBuildPointer(direction, direction.ToVector3(), buildingTrueCenterPosition + buildingTrueSize));
+                builingPointers.Add(_buildingPointersFactory.GetNewBuildPointer(direction,
+                    direction.ToVector3(), buildingTrueCenterPosition + buildingTrueSize));
 
         Debug.Log("Building Pointers Is Spawned");
         return builingPointers;
     }
 
-    private MonoBehaviour SelectItem()
+    private Transform SelectItem()
     {
         var collisionObject = GetRayCollision()?.GetComponent<CollisionObject>();
         if (collisionObject != null)
@@ -94,53 +112,57 @@ public class BuilderBehaviour : IUpdatable
         Collider GetRayCollision()
         {
             Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                return hit.collider;
-            }
-            return null;
+            return Physics.Raycast(ray, out var hit) ? hit.collider : null;
         }
     }
 
+    private static RaycastHit GetRaycastHitByMousePosition(Camera camera)
+    {
+        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        return Physics.Raycast(ray, out var hit) ? hit : new RaycastHit();
+    }
+    
+    private bool CheckBuildingSettingAvialible()
+    {
+        return _selectedBuilding != null && _selectedBuildingPointer != null;
+    }
+    
     private void SetCurrentBuilding()
     {
         if (BuildingWithChilds.IsBuildingWithChilds(_selectedBuilding))
         {
-            var correctBuildPoint = GetCorrectBuildingBuildPoint((BuildingWithChilds)_selectedBuilding, _currentBuilding, _selectedBuildingPointer.Direction);
+            var correctBuildPoint = GetCorrectBuildingBuildPoint((BuildingWithChilds)_selectedBuilding,
+                _currentBuilding, _selectedBuildingPointer.Direction);
             if (correctBuildPoint != null)
             {
-                _currentBuilding.SetSupportBuilding((BuildingWithChilds)_selectedBuilding, correctBuildPoint.BuildPosition);
+                _currentBuilding.SetSupportBuilding((BuildingWithChilds)_selectedBuilding,
+                    correctBuildPoint.BuildPosition);
             }
         }
     }
 
-    private BuildPoint GetCorrectBuildingBuildPoint(BuildingWithChilds supportBuilding, Building childBuilding, Direction direction)
+    private BuildPoint GetCorrectBuildingBuildPoint(BuildingWithChilds supportBuilding, Building childBuilding, 
+        Direction direction)
     {
-        var a = supportBuilding.BuildPoints[direction];
-        if (a != null)
-        {
-            foreach (var buildPoint in a)
-            {
-                if (buildPoint.WhiteList.Contains(_currentBuilding.BuildingType))
-                {
-                    return buildPoint;
-                }
-            }
-        }
-        return null;
+        var buildPoints = supportBuilding.BuildPoints[direction];
+        return buildPoints?.FirstOrDefault(buildPoint => buildPoint.WhiteList.Contains(_currentBuilding.BuildingType));
     }
 
     private void SetCurrentBuildingPosition()
     {
-        if (BuildingWithChilds.IsBuildingWithChilds(_selectedBuilding))
+        if (_selectedBuilding != null)
         {
-            var correctBuildPoint = GetCorrectBuildingBuildPoint((BuildingWithChilds)_selectedBuilding, _currentBuilding, _selectedBuildingPointer.Direction);
-            if (correctBuildPoint != null)
-            {
-                _currentBuilding.transform.position = correctBuildPoint.BuildPosition;
-                Debug.Log("Current Building Position Is Seted");
-            }
+            var correctBuildPoint = GetCorrectBuildingBuildPoint((BuildingWithChilds)_selectedBuilding, 
+                _currentBuilding, _selectedBuildingPointer.Direction);
+            if (correctBuildPoint == null) return;
+            _currentBuilding.transform.position = correctBuildPoint.BuildPosition;
+            Debug.Log("Current Building Position Is Seted");
+        }
+        else
+        {
+            var currentCell = _gameField.GetCellByPosition(GetRaycastHitByMousePosition(_mainCamera).point.ToVector3Int());
+            if (currentCell == null) return;
+            _currentBuilding.transform.position = currentCell.WorldPosition;
         }
     }
 
@@ -174,12 +196,12 @@ public class BuilderBehaviour : IUpdatable
 
     private void DeclineSettingBuilding()
     {
-        _buildingFactory.DestroyBuilding(_currentBuilding);
+        _buildingFactory.Reclaim(_currentBuilding);
         Reset();
         Debug.Log("Setting Building Is Declined");
     }
 
-    public void Reset()
+    private void Reset()
     {
         _currentBuilding = null;
         _selectedBuilding = null;
@@ -187,6 +209,11 @@ public class BuilderBehaviour : IUpdatable
         _spawnedPointers.DestroyObjects();
         _selectedBuildingPointer = null;
         Debug.Log("Fields Is Reseted");
+    }
+
+    public void Recycle()
+    {
+        Reset();
     }
 }
 

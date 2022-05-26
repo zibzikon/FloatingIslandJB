@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1196788832340334162}
   - component: {fileID: 2297640349653483281}
   - component: {fileID: 7067392995840646768}
-  - component: {fileID: 3110076953093645505}
+  - component: {fileID: 3926602346103319806}
   m_Layer: 0
   m_Name: Icosphere.013
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3110076953093645505
+--- !u!114 &3926602346103319806
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,9 +93,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3949522974034619115}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 471f5a0ac2adf234aa01415643e21ec3, type: 3}
+  m_Script: {fileID: 11500000, guid: f0dd20a575baa7148a8335a985303062, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _whiteList: 
 --- !u!1 &6532668489579362533
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,10 +108,10 @@ GameObject:
   - component: {fileID: 4908151068429043762}
   - component: {fileID: 3849227210088164360}
   - component: {fileID: 7044744016819384070}
-  - component: {fileID: 740163944285049542}
   - component: {fileID: 293567665511265651}
-  - component: {fileID: 8188397494453327214}
-  - component: {fileID: 1395492377804418349}
+  - component: {fileID: 1979016481610707507}
+  - component: {fileID: 402720264824716133}
+  - component: {fileID: 6082361549587435022}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -184,21 +185,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &740163944285049542
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6532668489579362533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfad2e3629fbcfa4fafff392b777a47b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ChildBuildings: []
-  _fowardBuildPoint: {fileID: 3110076953093645505}
-  _buildingComponents: {fileID: 1395492377804418349}
 --- !u!65 &293567665511265651
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -212,7 +198,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.1096, y: 0.004876918, z: 0.07599961}
   m_Center: {x: 0.05480003, y: 0.002301667, z: 0.032684695}
---- !u!114 &8188397494453327214
+--- !u!114 &1979016481610707507
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,17 +207,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6532668489579362533}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39a9f512bda45644dbb68ccb8152127f, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f4ddfd63d7a4a0458cbbaf6fa249761, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rightBuildPoints: []
-  _leftBuildPoints: []
-  _fowardBuildPoints:
-  - {fileID: 3110076953093645505}
-  _backBuildPoints: []
-  _upBuildPoints: []
-  _downBuildPoints: []
---- !u!114 &1395492377804418349
+  _collisionObject: {fileID: 6082361549587435022}
+  _buildingType: 1
+--- !u!114 &402720264824716133
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -240,9 +221,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 6532668489579362533}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44e23ea20c9f43c4180f2465c26d01ca, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e625b4c709e47d593c29efd87cce80e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MeshRenderer: {fileID: 7044744016819384070}
-  NeighbourBuildPoints: {fileID: 8188397494453327214}
-  Collider: {fileID: 293567665511265651}
+  _right: []
+  _left: []
+  _foward: []
+  _back:
+  - {fileID: 3926602346103319806}
+  _up: []
+  _down: []
+--- !u!114 &6082361549587435022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6532668489579362533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78a40fcf85e08474c8b615c4734fadc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 4908151068429043762}

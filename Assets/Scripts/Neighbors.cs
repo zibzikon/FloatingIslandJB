@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Neighbors<T>: MonoBehaviour
+public class Neighbors<T>
 { 
     public T Right;
     public T Left;

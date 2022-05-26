@@ -16,7 +16,10 @@ sealed class Builder : IUpdatable
         _builderBehaviour.OnUpdate();
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            _builderBehaviour.SpawnBuilding(BuildingType.SupportPillar);
+            if (_builderBehaviour.BuildingWasSpawned == false)
+            {
+                _builderBehaviour.SpawnBuilding(BuildingType.SupportPillar);
+            }
         }
     }
 } 

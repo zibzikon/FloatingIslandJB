@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47995632f12228342b25f60f23b3e967, type: 3}
   m_Name: Building Factory
   m_EditorClassIdentifier: 
-  _supportPillarPrefab: {fileID: 8494958968599023436, guid: d0763afabfe3d1742ae8d4c8932c9035,
+  _supportPillarPrefab: {fileID: 4262796798059710654, guid: d0763afabfe3d1742ae8d4c8932c9035,
     type: 3}

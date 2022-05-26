@@ -4,10 +4,15 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class CollisionObject : MonoBehaviour
 {
-    public Collider Collider => GetComponent<Collider>();
+    public Collider Collider { get; private set; }
     
     [SerializeField]
-    private MonoBehaviour _parent;
-    public MonoBehaviour Parent => _parent;
+    private Transform _parent;
+    public Transform Parent => _parent;
+
+    private void Awake()
+    {
+        Collider = GetComponent<Collider>();
+    }
 }
 

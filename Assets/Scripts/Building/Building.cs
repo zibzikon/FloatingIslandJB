@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Factories.Building;
 using UnityEngine;
 
-public class Building : MonoBehaviour , IRecyclable
+public abstract class Building : MonoBehaviour , IRecyclable
 {
     [SerializeField]
     private CollisionObject _collisionObject;

@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameInitializer : MonoBehaviour, IUpdatable
 {
@@ -12,6 +11,8 @@ public class GameInitializer : MonoBehaviour, IUpdatable
     private Canvas _generalCanvas;
 
     [SerializeField] private MainUI _mainUIPrefab;
+
+    [SerializeField] private GameField.GameField _gameField; 
     
     private void Update()
     {
@@ -29,7 +30,7 @@ public class GameInitializer : MonoBehaviour, IUpdatable
         mainUI.Initialize(_player);
         
         _player = Instantiate(_playerPrefab);
-        _player.Initialize(mainUI.transform);
+        _player.Initialize(_gameField,mainUI.transform);
     }
 
     public void OnUpdate()
