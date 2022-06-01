@@ -9,17 +9,17 @@ namespace Factories.Building
         [SerializeField] 
         private BuildingPointer _buildPointerPrefab;
 
-        private Dictionary<Direction, Quaternion> _directionToRtation = new()
+        private Dictionary<Direction3, Quaternion> _directionToRtation = new()
         {
-            [Direction.Right] = new Quaternion(),
-            [Direction.Left] = new Quaternion(),
-            [Direction.Foward] = new Quaternion(),
-            [Direction.Back] = new Quaternion(),
-            [Direction.Up] = new Quaternion(),
-            [Direction.Down] = new Quaternion()
+            [Direction3.Right] = new Quaternion(),
+            [Direction3.Left] = new Quaternion(),
+            [Direction3.Foward] = new Quaternion(),
+            [Direction3.Back] = new Quaternion(),
+            [Direction3.Up] = new Quaternion(),
+            [Direction3.Down] = new Quaternion()
         };
 
-        public BuildingPointer GetNewBuildPointer(Direction direction, Vector3 offset, Vector3 spawnPosition)
+        public BuildingPointer GetNewBuildPointer(Direction3 direction, Vector3 offset, Vector3 spawnPosition)
         {
             var instance = Instantiate(_buildPointerPrefab, spawnPosition + offset, _directionToRtation[direction]).GetComponent<BuildingPointer>();
             instance.Initialize( direction);

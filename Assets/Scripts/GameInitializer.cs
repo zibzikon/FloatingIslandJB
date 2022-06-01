@@ -12,7 +12,7 @@ public class GameInitializer : MonoBehaviour, IUpdatable
 
     [SerializeField] private MainUI _mainUIPrefab;
 
-    [SerializeField] private GameField.GameField _gameField; 
+    [SerializeField] private GameField _gameField; 
     
     private void Update()
     {
@@ -30,7 +30,7 @@ public class GameInitializer : MonoBehaviour, IUpdatable
         mainUI.Initialize(_player);
         
         _player = Instantiate(_playerPrefab);
-        _player.Initialize(_gameField,mainUI.transform);
+        _player.Initialize(_gameField, mainUI.transform);
     }
 
     public void OnUpdate()

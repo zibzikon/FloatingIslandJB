@@ -6,12 +6,15 @@ public class BuildPoint: MonoBehaviour
 {
     [SerializeField] private List<BuildingType> _whiteList;
     public List<BuildingType> WhiteList => _whiteList;
+    
+    [SerializeField] private Vector3Int _startOccupedCellPosition;
+    public Vector3Int OccupedCellPosition { get; private set; }
+    
+    public Vector3 BuildPosition => GetComponent<Transform>().position;
 
-    public Vector3 BuildPosition { get; private set; }
-
-    private void Awake()
+    public void SetPosition(Vector3Int parentPosition)
     {
-        BuildPosition = GetComponent<Transform>().position;
+        OccupedCellPosition = _startOccupedCellPosition + parentPosition;
     }
 }
 

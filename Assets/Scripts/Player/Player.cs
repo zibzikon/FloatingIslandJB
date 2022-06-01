@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using Factories.Building;
 using Factories.Container;
-using Container;
 using UnityEngine;
 
 public sealed class Player: MonoBehaviour, IPlayer, IUpdatable
@@ -25,7 +22,7 @@ public sealed class Player: MonoBehaviour, IPlayer, IUpdatable
     private Builder _builder;
     
 
-    public void Initialize(GameField.GameField gameField,Transform plyerUi)
+    public void Initialize(GameField gameField,Transform plyerUi)
     {
         _builder = new Builder(new BuilderBehaviour(gameField, _buildingFactory, _buildingPointersFactory, Camera.main));
         _contentToUpdate.Add(_builder);

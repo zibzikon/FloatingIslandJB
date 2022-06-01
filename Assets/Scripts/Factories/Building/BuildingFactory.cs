@@ -9,6 +9,7 @@ namespace Factories.Building
         [SerializeField]private global::Building _supportPillarPrefab;
         public void Reclaim(global::Building building)
         {
+            building.Recycle();
             Destroy(building.gameObject);
         }
         public global::Building GetNewBuilding(BuildingType type)

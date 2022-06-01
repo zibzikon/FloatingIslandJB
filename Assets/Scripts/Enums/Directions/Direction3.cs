@@ -1,5 +1,5 @@
 ﻿
-public enum Direction
+public enum Direction3
 {
     Zero,
     Right,

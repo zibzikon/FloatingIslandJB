@@ -43,9 +43,11 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Interact\interfaces\IInteractable.cs" />
      <Compile Include="Assets\Scripts\ContainerInteractionBehaviour.cs" />
+     <Compile Include="Assets\Scripts\Building\BuildPoints.cs" />
      <Compile Include="Assets\Scripts\Player\Views\PlayerInterface.cs" />
      <Compile Include="Assets\Scripts\Interact\interfaces\IInteractionBehaviour.cs" />
      <Compile Include="Assets\Scripts\CollisionObject.cs" />
+     <Compile Include="Assets\Scripts\Enums\Directions\Direction2.cs" />
      <Compile Include="Assets\Scripts\Player\Views\Inventory\InventoryView.cs" />
      <Compile Include="Assets\Scripts\Container\Item\Interfaces\IPlaceble.cs" />
      <Compile Include="Assets\Scripts\BuilderBehaviour.cs" />
@@ -58,6 +60,7 @@
      <Compile Include="Assets\Scripts\Player\Interfaces\IPlayer.cs" />
      <Compile Include="Assets\Scripts\Enums\VisibilityType.cs" />
      <Compile Include="Assets\Scripts\Container\ViewModels\CellContentViewModel.cs" />
+     <Compile Include="Assets\Scripts\Extentions\VectorExtentions.cs" />
      <Compile Include="Assets\Scripts\Factories\Building\BuildingFactory.cs" />
      <Compile Include="Assets\Scripts\Interact\InteractableBuilding.cs" />
      <Compile Include="Assets\Scripts\Enums\Building\BuildingType.cs" />
@@ -65,7 +68,7 @@
      <Compile Include="Assets\Scripts\Player\Models\Inventory\Inventory.cs" />
      <Compile Include="Assets\Scripts\Container\Item\Items\Wood.cs" />
      <Compile Include="Assets\Scripts\Container\ViewModels\ViewModelBehaviour.cs" />
-     <Compile Include="Assets\Scripts\Enums\Direction.cs" />
+     <Compile Include="Assets\Scripts\Enums\Directions\Direction3.cs" />
      <Compile Include="Assets\Scripts\Building\BuildingWithChilds.cs" />
      <Compile Include="Assets\Scripts\Container\VIews\ItemsContainerView.cs" />
      <Compile Include="Assets\Scripts\PlayerWithWorldInteraction.cs" />
@@ -105,9 +108,11 @@
      <Compile Include="Assets\Scripts\Factories\Building\BuildingPointersFactory.cs" />
      <Compile Include="Assets\Scripts\Container\Models\Cell.cs" />
      <Compile Include="Assets\Scripts\Container\Item\Behaviours\Placeble\PlacebleItemBehaviour.cs" />
+     <Compile Include="Assets\Scripts\Building\IBuildingContainer.cs" />
      <Compile Include="Assets\Interfaces\IUpdatable.cs" />
      <Compile Include="Assets\Scripts\GameField\Сell.cs" />
      <Compile Include="Assets\Scripts\Container\Item\Item.cs" />
+     <Compile Include="Assets\Testing.cs" />
      <Compile Include="Assets\Scripts\Container\Item\Behaviours\Pickable\PickableItemBehaviour.cs" />
      <Compile Include="Assets\Scripts\Container\Item\Interfaces\IDropable.cs" />
      <Compile Include="Assets\Scripts\Container\Item\Behaviours\Craftable\NonCraftableItemBehaviour.cs" />
@@ -122,8 +127,7 @@
      <Compile Include="Assets\Scripts\Container\Item\Behaviours\Pickable\NonPickableItemBehaviour.cs" />
      <Compile Include="Assets\Scripts\Container\Item\Behaviours\Craftable\CraftableItemBehaviour.cs" />
      <Compile Include="Assets\Scripts\Neighbors.cs" />
-     <Compile Include="Assets\Scripts\Building\BuildPoints.cs" />
-     <Compile Include="Assets\Scripts\Extentions\VectorExtentions.cs" />
+     <Compile Include="Assets\Scripts\GameField\Views\GameFieldCellView.cs" />
      <Reference Include="UnityEngine">
      <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.3f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
      </Reference>
