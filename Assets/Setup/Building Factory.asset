@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _supportPillarPrefab: {fileID: 4262796798059710654, guid: d0763afabfe3d1742ae8d4c8932c9035,
     type: 3}
+  _wallPrefab: {fileID: 1541795793581311489, guid: f17056281a2ed194e9e5df6f3dec9e8f,
+    type: 3}

@@ -1,41 +1,76 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using Extentions;
+using Factories.Building;
+using Unity.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(BuildPoints))]
 public class BuildingWithChilds : Building, IUpdatable, IBuildingContainer
 {
-    private Neighbors<List<BuildPoint>> _buildPoints;
+    [SerializeField] protected BuildPoints _buildPoints;
+
+    [SerializeField] private ConstructionsFactory _constructionsFactory;
+    
+    private void Start()
+    {
+        foreach (var direction in DirectionExtentions.GetDirectionEnumerable())
+        {
+            foreach (var buildPoint in _buildPoints.Points[direction])
+            {
+                buildPoint.Initialize(direction);
+            }
+        }
+    }
     
     private static readonly IEnumerable<BuildingType> BuildingTypesWithChilds = new[]
     {
         BuildingType.SupportPillar,
         BuildingType.Wall
     };
-    
-    private void Awake()
+
+    public IEnumerable<BuildPoint> GetCorrectBuildPoints(Building building)
     {
-        _buildPoints = GetComponent<BuildPoints>().Points;
+        var allCorrectBuildPoints = new List<BuildPoint>();
+        for (int i = 0; i < Neighbors3<BuildPoint>.Length; i++)
+        {
+           var correctBuildPoints = 
+               _buildPoints.Points[i].Where(buildPoint => buildPoint.WhiteList.Contains(building.BuildingType));
+           allCorrectBuildPoints.AddRange(correctBuildPoints);
+        }
+
+        return allCorrectBuildPoints;
     }
 
-
-    public BuildPoint GetCorrectBuildPoint(Building building, Direction3 direction)
+    public IEnumerable<Direction3> GetGetCorrectBuildPointsDirections(Building building)
     {
-        var buildPoints = _buildPoints[direction];
-        return buildPoints?.FirstOrDefault(buildPoint => buildPoint.WhiteList.Contains(building.BuildingType));
+        var buildPoints = GetCorrectBuildPoints(building);
+        
+        var directions = new List<Direction3>();
+
+        foreach (var buildPoint in buildPoints)
+        {
+            if (!directions.Contains(buildPoint.Direction))
+            {
+                directions.Add(buildPoint.Direction);
+            }
+        }
+
+        return directions;
     }
-    
-    public void SetBuildPointsPosition()
+
+    public void SetBuildPointsPositions()
     {
         for (int i = 0; i < 6; i++)
         {
-            foreach (var buildPoint in _buildPoints[i])
+            foreach (var buildPoint in _buildPoints.Points[i])
             {
                 buildPoint.SetPosition(this.PositionOnGameField);
             }
         }
     }
     
+
     public virtual void OnUpdate()
     {
     }

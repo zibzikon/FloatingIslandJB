@@ -1,27 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Enums;
 using Extentions;
 using UnityEngine;
 
-public abstract class Building : MonoBehaviour , IRecyclable
+public abstract class Building : MonoBehaviour , IRecyclable, ITarget
 {
+    [SerializeField] private TargetType targetType;
+    public TargetType TargetType => targetType;
+    public Transform Transform => this.transform;
+    
     [SerializeField] private Vector3Int _startPosition;
     
     public Vector3Int PositionOnGameField { get; private set; }
     
-    [SerializeField] private List<Vector3Int> _occupyingCells;
+    [SerializeField] private List<OccupingCell> _occupyingCells;
+    
+    public List<OccupingCell> OccupyingCells => _occupyingCells;
+    private List<OccupingCell> _setedCells;
+    public List<OccupingCell> SetedCells { 
+        get=> _setedCells;
+        set
+        {
+            if (value.Count != OccupyingCells.Count) throw new IndexOutOfRangeException();
+            _setedCells = value;
+        }
+    }
 
     [SerializeField] private BuildingType _buildingType;
 
     [SerializeField] private Direction2 _direction = Direction2.Foward;
+
+    [SerializeField] private Direction2 _settingDirection;
     
+    public IBuildingsContainer BuildingContainer { get; private set;}
     public BuildingType BuildingType => _buildingType;
 
     private IBuildingContainer _supportBuilding;
 
-    private GameField _gameField;
-    private List<Cell> _settedCells = new ();
+    public bool SupportBuildingIsSetted => _supportBuilding != null;
+
+    public GameField GameField { get; private set; }
     
     private static readonly IEnumerable<BuildingType> _buildingTypesCanBeSettedOnGameField = new[]
     {
@@ -32,60 +52,68 @@ public abstract class Building : MonoBehaviour , IRecyclable
     {
         return _buildingTypesCanBeSettedOnGameField.Contains(building._buildingType);
     }
-    public void Initialize(GameField gameField)
+    
+    public void Initialize(GameField gameField, IBuildingsContainer buildingContainer)
     {
-        _gameField = gameField;
+        GameField = gameField;
+        BuildingContainer = buildingContainer;
     }
+    
     public void SetDirection(Direction2 direction)
     {
         for (int i = 0; i < _occupyingCells.Count; i++)
         {
             var cell = _occupyingCells[i];
-            _occupyingCells[i] = cell.SetDirection(_direction, direction);
+            var newPosition = cell.Position.SetDirection(_direction, direction);
+            _occupyingCells[i] = new OccupingCell(newPosition, cell.Weight);
         }
         
         _direction = direction;
     }
-    
-    public bool TrySetBuilding(IBuildingContainer buildingContainer ,BuildPoint buildPoint)
-    {
-        buildingContainer.SetBuildPointsPosition();
-        if (TrySetCells(_gameField.GetCellByPosition(buildPoint.OccupedCellPosition)) == false) return false;
-        _supportBuilding = buildingContainer;
-        this.transform.position = buildPoint.BuildPosition;
-        Debug.Log("buildingWasSeted");
-        return true;
-    }
 
-    public bool TrySetBuilding(Cell startCell)
-    {
-        if (TrySetCells(startCell) == false) return false;
-        this.transform.position = startCell.WorldPosition;
-        Debug.Log("buildingWasSeted");
-        return true;
-    }
 
-    private bool TrySetCells(Cell startCell)
+
+    private void Update()
     {
-        var tempSettedCells = new List<Cell>();
-        foreach (var cellPosition in _occupyingCells)
+        if (Input.GetKeyDown(KeyCode.R))
         {
-           var cell = _gameField.GetCellByPosition(_startPosition + startCell.Position + cellPosition);
-           if (cell.IsFilled && !_settedCells.Contains(cell)) return false;
-           tempSettedCells.Add(cell);
+            SetDirection(_settingDirection);
         }
+    }
 
-        PositionOnGameField = startCell.Position + _startPosition;
-        _settedCells.ForEach(cell=>cell.Clear());
-        tempSettedCells.ForEach(cell => cell.Fill());
-        _settedCells = tempSettedCells;
-        
-        return true;
+    public void SetSupportBuilding(IBuildingContainer supportBuilding)
+    {
+        _supportBuilding = supportBuilding;
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        Transform.position = position;
     }
     
-
+    public void SetPositionOnGameField(Vector3Int position)
+    {
+        PositionOnGameField = position;
+    }
+     
     public void Recycle()
     {
-        _settedCells.ForEach(cell=>cell.Clear());
+        
+    }
+}
+
+[Serializable]
+public struct OccupingCell
+{
+    [SerializeField] private Vector3Int _position;
+    public Vector3Int Position => _position;
+    
+    [SerializeField] private int _weight;
+    public int Weight => _weight;
+
+    public OccupingCell(Vector3Int position, int weight)
+    {
+        _weight = weight;
+        _position = position;
     }
 }

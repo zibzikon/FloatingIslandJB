@@ -15,7 +15,30 @@ public class GameFieldCellView : MonoBehaviour
     
     private void ChangeView()
     {
-        _meshRenderer.material.color = _cell.IsFilled ? Color.red : Color.green;
+        if (_cell.Ccapacity <= 0)
+        {
+            _meshRenderer.material.color = Color.red;
+        }
+        else if (_cell.Ccapacity < 25)
+        {
+            _meshRenderer.material.color = Color.yellow;
+        }
+        else if (_cell.Ccapacity < 50)
+        {
+            _meshRenderer.material.color = Color.green;
+        }
+        else if (_cell.Ccapacity < 75)
+        {
+            _meshRenderer.material.color = Color.cyan;
+        }
+        else if (_cell.Ccapacity < 100)
+        {            
+            _meshRenderer.material.color = Color.gray;
+        }
+        else if (_cell.Ccapacity >= 100)
+        {            
+            _meshRenderer.material.color = Color.white;
+        }
     }
 
     private void OnDisable()

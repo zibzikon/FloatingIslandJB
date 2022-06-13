@@ -3,6 +3,6 @@ using UnityEngine;
 
 public interface IBuildingContainer
 { 
-   void SetBuildPointsPosition();
-   public BuildPoint GetCorrectBuildPoint(Building building, Direction3 direction);
+   void SetBuildPointsPositions();
+   public IEnumerable<BuildPoint> GetCorrectBuildPoints(Building building);
 }

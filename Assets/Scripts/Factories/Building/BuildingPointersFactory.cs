@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Factories.Building
 {
-    [CreateAssetMenu(fileName = "BuildingPointersFactory")]
+    [CreateAssetMenu(menuName = @"Factories/Building/BuildingPointersFactory")]
     public class BuildingPointersFactory: ScriptableObject
     {
         [SerializeField] 

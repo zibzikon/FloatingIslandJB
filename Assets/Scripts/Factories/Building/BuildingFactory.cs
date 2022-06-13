@@ -3,10 +3,11 @@ using UnityEngine;
 
 namespace Factories.Building
 {
-    [CreateAssetMenu(fileName = "BuildingFactory")]
+    [CreateAssetMenu(menuName = @"Factories/Building/BuildingFactory")]
     public class BuildingFactory : ScriptableObject
     {
         [SerializeField]private global::Building _supportPillarPrefab;
+        [SerializeField]private global::Building _wallPrefab;
         public void Reclaim(global::Building building)
         {
             building.Recycle();
@@ -18,6 +19,8 @@ namespace Factories.Building
             {
                 case BuildingType.SupportPillar:
                     return GetNewBuilding(_supportPillarPrefab);
+                case BuildingType.Wall:
+                    return GetNewBuilding(_wallPrefab);
             }
             
             throw new NullReferenceException();

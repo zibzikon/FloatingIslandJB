@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
 using Factories.Building;
-using Factories.Container;
 using UnityEngine;
 
 public sealed class Player: MonoBehaviour, IPlayer, IUpdatable
 {
-    
-    [SerializeField] private ItemsContainerFactory _inventoryFactory;
-    
+
     [SerializeField] private BuildingFactory _buildingFactory;
 
     [SerializeField] private BuildingPointersFactory _buildingPointersFactory;
@@ -16,8 +13,6 @@ public sealed class Player: MonoBehaviour, IPlayer, IUpdatable
     
     private List<IUpdatable> _contentToUpdate = new();
 
-    private Inventory _inventory;
-    public Inventory Inventory => _inventory;
     
     private Builder _builder;
     
@@ -34,9 +29,5 @@ public sealed class Player: MonoBehaviour, IPlayer, IUpdatable
             content.OnUpdate();
         }
     }
-
-    private void Update()
-    {
-        
-    }
+    
 }

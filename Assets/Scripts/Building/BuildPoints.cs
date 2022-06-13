@@ -11,11 +11,11 @@ public class BuildPoints : MonoBehaviour
     [SerializeField] private List<BuildPoint> _up;
     [SerializeField] private List<BuildPoint> _down;
     
-    public Neighbors<List<BuildPoint>> Points { get; private set; }
+    public Neighbors3<List<BuildPoint>> Points { get; private set; }
 
     private void Awake()
     {
-        Points = new Neighbors<List<BuildPoint>>
+        Points = new Neighbors3<List<BuildPoint>>
         { 
             Right = _right,
             Left = _left,

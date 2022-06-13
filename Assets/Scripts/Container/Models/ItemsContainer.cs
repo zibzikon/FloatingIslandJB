@@ -1,5 +1,4 @@
 using System;
-using Factories.Container;
 
 namespace Container
 {
@@ -12,7 +11,6 @@ namespace Container
 
         public int Size => _cells.Length;
         
-        private ItemsContainerCellContentFactory cellContentFactory;
 
         public Cell SelectCell(int index)
         {
@@ -37,26 +35,11 @@ namespace Container
         
         public void Initialize(int size)
         {
-            cellContentFactory = new ItemsContainerCellContentFactory();
             Generate(size);
         }
 
         private void Generate(int size)
         {
-            Cell[] cells = new Cell[size];
-            for (int i = 0; i < size; i++)
-            {
-                if (i % 3 == 0)
-                {
-                    cells[i] = new Cell(cellContentFactory.GetNewContainerCellContent(new Random().Next(0,1) == 0?ItemType.Stone:ItemType.Wood));
-                }
-                else
-                {
-                    cells[i] = new Cell(cellContentFactory.GetNewContainerCellContent(ItemType.Empty));
-                }
-            }
-
-            _cells = cells;
         }
     }
 }
