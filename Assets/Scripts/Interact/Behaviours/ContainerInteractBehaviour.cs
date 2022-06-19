@@ -1,12 +1,12 @@
 
 public class ContainerInteractBehaviour:IInteractionBehaviour,IOpenable
 {
-    public void OnInteract(IPlayer sender)
+    public void OnInteract(IInteractor sender)
     {
         Open(sender);
     }
 
-    public void Open(IPlayer sender)
+    public void Open(IInteractor sender)
     {
     }
 }

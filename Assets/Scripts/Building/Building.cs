@@ -4,10 +4,14 @@ using System.Linq;
 using Enums;
 using Extentions;
 using UnityEngine;
+using UnityEngine.Events;
 
-public abstract class Building : MonoBehaviour , IRecyclable, ITarget
+public abstract class Building : MonoBehaviour , IRecyclable, ITarget, IDiethable
 {
+    [SerializeField] protected  BuildingStats _buildingStats;
+    
     [SerializeField] private TargetType targetType;
+    public event Action PositionChanged;
     public TargetType TargetType => targetType;
     public Transform Transform => this.transform;
     
@@ -18,7 +22,7 @@ public abstract class Building : MonoBehaviour , IRecyclable, ITarget
     [SerializeField] private List<OccupingCell> _occupyingCells;
     
     public List<OccupingCell> OccupyingCells => _occupyingCells;
-    private List<OccupingCell> _setedCells;
+    private List<OccupingCell> _setedCells = new List<OccupingCell>();
     public List<OccupingCell> SetedCells { 
         get=> _setedCells;
         set
@@ -38,10 +42,9 @@ public abstract class Building : MonoBehaviour , IRecyclable, ITarget
     public BuildingType BuildingType => _buildingType;
 
     private IBuildingContainer _supportBuilding;
-
+    
+    public UnityEvent Died { get; } = new UnityEvent();
     public bool SupportBuildingIsSetted => _supportBuilding != null;
-
-    public GameField GameField { get; private set; }
     
     private static readonly IEnumerable<BuildingType> _buildingTypesCanBeSettedOnGameField = new[]
     {
@@ -53,9 +56,8 @@ public abstract class Building : MonoBehaviour , IRecyclable, ITarget
         return _buildingTypesCanBeSettedOnGameField.Contains(building._buildingType);
     }
     
-    public void Initialize(GameField gameField, IBuildingsContainer buildingContainer)
+    public void Initialize(IBuildingsContainer buildingContainer)
     {
-        GameField = gameField;
         BuildingContainer = buildingContainer;
     }
     
@@ -69,16 +71,6 @@ public abstract class Building : MonoBehaviour , IRecyclable, ITarget
         }
         
         _direction = direction;
-    }
-
-
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SetDirection(_settingDirection);
-        }
     }
 
     public void SetSupportBuilding(IBuildingContainer supportBuilding)
@@ -95,10 +87,23 @@ public abstract class Building : MonoBehaviour , IRecyclable, ITarget
     {
         PositionOnGameField = position;
     }
+    
+    public void Damage(int count)
+    {
+        _buildingStats.Health -= count;
+        if (_buildingStats.Health > 0) return;
+        Die();
+    }
      
     public void Recycle()
     {
         
+    }
+    
+    public void Die()
+    {
+        Destroy(gameObject);
+        Died?.Invoke();
     }
 }
 

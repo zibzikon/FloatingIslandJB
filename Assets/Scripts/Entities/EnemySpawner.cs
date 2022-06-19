@@ -1,167 +1,109 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Enums;
-using UnityEngine;
 using Extentions;
+using Factories.Enemy;
+using UnityEngine;
 
-public class EnemySpawner : ITargetContainer
+public class EnemySpawner : ITargetContainer, IUpdatable
 {
-    private GameField _gameField;
-    private PathFindingField GameField = new PathFindingField();
+    private readonly EnemyFactory _enemyFactory;
     
-    public ITarget GetClosestTarget(Vector3 startPosition, TargetType preferredTargetType)
+    private readonly PathFinder _pathFinder;
+    
+    private readonly GameField _gameField;
+    
+    private readonly List<Enemy> _enemies = new();
+    
+    private readonly Player _player;
+    
+    public EnemySpawner(GameField gameField, EnemyFactory enemyFactory,Player player)
     {
-        return null;
+        _gameField = gameField;
+        _enemyFactory = enemyFactory;
+        _pathFinder = new PathFinder(gameField);
+        _player = player;
     }
 
-    public void Initialize()
+    public ITarget GetClosestTargetOnLayer(Vector3 startPosition, TargetType preferredTargetType)
     {
+        if (preferredTargetType == TargetType.Player) return _player;
         
-    }
-    
-    private Stack<PathCell> FindPath(PathCell startCell, PathCell endCell)
-    {
-        var reachableCells = new List<PathCell>() {startCell};
-        var exploredCells = new List<PathCell>();
+        var startCell = _gameField.GetCellByWorldPosition(startPosition);
+
+        var reachableCells = new Stack<Cell>();
+        reachableCells.Push(startCell);
+        
+        var exploredCells = new List<Cell>();
+        Cell closestCellWithTarget = null;
+
         while (reachableCells.Count > 0)
         {
-            var currentCell = ChooseCell();
+            var currentCell = reachableCells.Pop();
+            exploredCells.Add(currentCell);
             
-            if (currentCell == endCell)
+            var cellSettedBuildings = currentCell.SetedBuildings;
+
+            var settedBuildings = cellSettedBuildings as Building[] ?? cellSettedBuildings.ToArray();
+            if (settedBuildings.Any())
             {
-                return BuildPath(currentCell);
+                if (settedBuildings.FirstOrDefault(building => 
+                        building.TargetType == preferredTargetType) != null)
+                    return GetBlockingTarget(startCell.Position, currentCell.Position);
+                closestCellWithTarget ??= currentCell;
             }
 
-            reachableCells.Remove(currentCell);
-            exploredCells.Add(currentCell);
-
-            var newReachableCells = currentCell.Neighbors.ToEnumerable();
+            var newReachableCells = currentCell.Neighbours.ToNeighbors2().ToEnumerable();
 
             foreach (var cell in newReachableCells)
             {
-                if (!exploredCells.Contains(cell)) continue;
-                
+                if (exploredCells.Contains(cell)) continue;
+
                 if (!reachableCells.Contains(cell))
                 {
-                    reachableCells.Add(cell);
-                }
-
-                if (currentCell.Cost +1 < cell.Cost)
-                {
-                    cell.PreviousCell = currentCell;
-                    cell.Cost = currentCell.Cost + 1;
+                    reachableCells.Push(cell);
                 }
             }
 
         }
 
-        PathCell ChooseCell()
+        ITarget blockingTarget = closestCellWithTarget != null ? GetBlockingTarget(startCell.Position, closestCellWithTarget.Position) :null;
+        
+        return blockingTarget ?? ( closestCellWithTarget?.SetedBuildings.First() ?? _player.WasDied ? null : _player );
+    }
+
+    private ITarget GetBlockingTarget(Vector3Int startCellPosition,Vector3Int endCellPosition)
+    {
+        var path = _pathFinder.FindPath(startCellPosition, endCellPosition);
+        var cell = path.Dequeue();
+        while (path.Count > 0)
         {
-            var minCost = Mathf.Infinity;
-            var bestCell = new PathCell(new Vector3Int(0,0,0));
-
-            foreach (var cell in reachableCells)
+            if (cell.IsBlocked)
             {
-                var fullCost = cell.GetFullCost(endCell);
-                if (minCost > fullCost)
-                {
-                    minCost = fullCost;
-                    bestCell = cell;
-                }
+                return cell.SetedBuildings.FirstOrDefault();
             }
-
-            return bestCell;
-        }
-
-        Stack<PathCell> BuildPath(PathCell cell)
-        {
-            var path = new Stack<PathCell>();
-            var currentCell = cell;
-            while (currentCell != null)
-            {
-                path.Push(currentCell);
-                currentCell = currentCell.PreviousCell;
-            }
-
-            return path;
+            cell = path.Dequeue();
         }
 
         return null;
     }
-}
-
-public class PathFindingField
-{
-    private PathCell[,,] _pathCells;
     
-    public void GeneratePathFindingField(Vector3Int size)
+
+    public void Initialize()
     {
-        _pathCells = new PathCell[size.x, size.y, size.z];
-        for (int y = 0; y < size.y; y++)
-        {
-            for (int x = 0; x < size.x; x++)
-            {
-                for (int z = 0; z < size.z; z++)
-                {
-                    var currentCell = _pathCells[x,y,z] = new PathCell(new Vector3Int(x,y,z));
-                    if (y > 0)
-                    {
-                        PathCell.SetUpDownNeighbours(currentCell, _pathCells[x,y-1,z]);
-                    }
-                    if (z > 0)
-                    {
-                        PathCell.SetFowardBackNeighbours(currentCell, _pathCells[x,y,z-1]);
-                    }
-                    if (x > 0)
-                    {
-                        PathCell.SetRightLeftNeighbours(currentCell, _pathCells[x-1,y,z]);
-                    }
-                }
-            }
-        }
+        _pathFinder.Initialize();
     }
 
-    public PathCell GetCellByPosition(Vector3Int position)
+    public void SpawnEnemy()
     {
-        return _pathCells[position.x, position.y, position.z];
+       _enemies.Add(_enemyFactory.Get(EnemyType.Garry, this, new Vector3(1,0,1)));
+    }
+    
+    public void OnUpdate()
+    {
+        _enemies.ForEach(enemy=>enemy.OnUpdate());
     }
 }
 
-public class PathCell
-{
-    public Neighbors3<PathCell> Neighbors { get; }
-    
-    public int multiplier = 1;
 
-    public int Cost;
-
-    public PathCell PreviousCell;
-    
-    public readonly Vector3Int Position;
-    
-    public PathCell(Vector3Int position)
-    {
-        Position = position;
-    }
-    
-    public int GetFullCost(PathCell endCell)
-    {
-        var length = (int)(Position - endCell.Position).magnitude;
-        return Cost * multiplier + length;
-    }
-    
-    public static void SetRightLeftNeighbours(PathCell right, PathCell left)
-    {
-        right.Neighbors.Left = left;
-        left.Neighbors.Right = right;
-    }
-    public static void SetFowardBackNeighbours(PathCell foward, PathCell back)
-    {
-        foward.Neighbors.Back = back;
-        back.Neighbors.Foward = foward;
-    }
-    public static void SetUpDownNeighbours(PathCell up, PathCell down)
-    {
-        up.Neighbors.Down = down;
-        down.Neighbors.Up = up;
-    }
-}

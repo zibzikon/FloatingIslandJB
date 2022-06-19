@@ -1,29 +1,31 @@
 using Enums;
 using Units.Behaviours;
-using Units.Behaviours.Atacking;
 using Units.Behaviours.Diethable;
 using UnityEngine;
+using UnityEngine.AI;
 
-
+[RequireComponent(typeof(NavMeshAgent))]
 public class Garry : Enemy
 {
-    protected override EnemyStats EnemyStats { get; }
+    protected override EnemyStats EnemyStats { get; } = new EnemyStats();
     
-    protected override TargetType PreferredTargetType { get; } = TargetType.Tower;
+    protected override TargetType PreferredTargetType => TargetType.Tower;
         
-    protected override IDiethable DieBehaviour { get; } = new TerrestrialEnemyDiethingBehaviour();
+    protected override IDiethable DieBehaviour { get; set; } 
 
-    protected override IAtackable AtackBehaviour { get; } = new ItemThrowerAtackingBehaviour();
+    protected override IAtackable AtackBehaviour { get; set; }
 
-    protected override IMovable MovingBehaviour { get; } = new TerrestrialEnemyMovingBehaviour();
-    
-    public override void OnUpdate()
+    protected override IMovable MovingBehaviour { get; set; }
+
+    protected override void InitializeBahaviours()
     {
-        
+        MovingBehaviour = new TerrestrialEnemyMovingBehaviour(GetComponent<NavMeshAgent>(), EnemyStats.MinRequiredDistanceToTarget);
+        AtackBehaviour = new TerrestrialEnemyAtackingBehaviour(MovingBehaviour, EnemyStats);
+        DieBehaviour = new TerrestrialEnemyDiethingBehaviour();
     }
 
-    private Transform GetTarget()
-    {
-        return null;
+    protected override ITarget GetTarget()
+    { 
+        return TargetContainer.GetClosestTargetOnLayer(transform.position, PreferredTargetType);
     }
 }

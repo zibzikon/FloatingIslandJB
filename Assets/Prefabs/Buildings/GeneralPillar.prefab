@@ -134,14 +134,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f4ddfd63d7a4a0458cbbaf6fa249761, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetType: 0
+  _buildingStats:
+    Health: 100
+  targetType: 3
   _startPosition: {x: 0, y: 0, z: 0}
   _occupyingCells:
   - _position: {x: 0, y: 0, z: 0}
-    _weight: 60
+    _weight: 80
   - _position: {x: 0, y: 1, z: 0}
-    _weight: 60
-  OccupyingCells: []
+    _weight: 80
   _buildingType: 0
   _direction: 3
   _settingDirection: 0

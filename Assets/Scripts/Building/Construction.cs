@@ -6,7 +6,6 @@ using UnityEngine;
 public class Construction : BuildingWithChilds
 {
     [SerializeField] private List<BuildingCell> _occupyingBuildingCells;
-    [SerializeField] private BuildPoints _buildPoints;
 
     public Construction TryGetConstruction(Building building, 
         IBuildingsContainer buildingsContainer)

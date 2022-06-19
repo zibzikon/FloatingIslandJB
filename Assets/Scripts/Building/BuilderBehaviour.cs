@@ -86,7 +86,7 @@ public class BuilderBehaviour : IUpdatable, IRecyclable, IBuildingsContainer
         if (_currentBuilding != null) return;
 
         _currentBuilding = _buildingFactory.GetNewBuilding(type);
-        _currentBuilding.Initialize(_gameField, this);
+        _currentBuilding.Initialize(this);
         if (BuildingWithChilds.IsBuildingWithChilds(_currentBuilding)) 
             _contentToUpdate.Add((BuildingWithChilds)_currentBuilding);
     }

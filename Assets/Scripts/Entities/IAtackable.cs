@@ -1,5 +1,6 @@
 
 public interface IAtackable
 {
-    public void Atack(IDamagable damagable);
+    public bool AtackingStarted { get; }
+    public void Atack(ITarget target);
 }

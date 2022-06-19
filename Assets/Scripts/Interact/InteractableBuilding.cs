@@ -6,7 +6,7 @@ namespace Interact
     {
         protected abstract IInteractionBehaviour InteractionBehaviour { get; }
        
-        public void Interact(IPlayer sender)
+        public void Interact(IInteractor sender)
         {
             InteractionBehaviour.OnInteract(sender);
         }

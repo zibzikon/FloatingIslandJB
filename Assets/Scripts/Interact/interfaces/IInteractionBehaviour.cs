@@ -1,4 +1,4 @@
 public interface IInteractionBehaviour
 {
-    void OnInteract(IPlayer sender);
+    void OnInteract(IInteractor sender);
 }

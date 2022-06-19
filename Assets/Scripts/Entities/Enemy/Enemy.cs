@@ -1,34 +1,34 @@
 
 using System;
 using Enums;
+using Interfaces;
 using UnityEngine;
-public abstract class Enemy : Entity, IDamagable, IAtackable, IMovable, IDiethable, IUpdatable
+using UnityEngine.Events;
+
+public abstract class Enemy : Entity, IDamagable, IUpdatable, IPausable
 {
-    protected Vector3 Position;
-    
+    public bool IsPaused { get; private set; }
+
+    public UnityEvent Died { get; }
+
     protected abstract EnemyStats EnemyStats { get; }
     
     protected override EntityStats Stats => EnemyStats;
     
     protected abstract TargetType PreferredTargetType { get; }
     
-    public event Action Moving;
-    
-    public event Action Atacking;
-    
-    public event Action Dieing;
-
     public event Action Damaging;
     
-    protected abstract IDiethable  DieBehaviour { get; }
-    protected abstract IAtackable AtackBehaviour { get; }
-    protected abstract IMovable MovingBehaviour { get; }
+    protected abstract IDiethable  DieBehaviour { get; set; }
+    protected abstract IAtackable AtackBehaviour { get; set;}
+    protected abstract IMovable MovingBehaviour { get; set;}
     
     protected ITargetContainer TargetContainer { get; private set; }
     
     public void Initialize(ITargetContainer targetContainer)
     {
         TargetContainer = targetContainer;
+        InitializeBahaviours();
     }
 
     public virtual void Damage(int count)
@@ -41,25 +41,34 @@ public abstract class Enemy : Entity, IDamagable, IAtackable, IMovable, IDiethab
         }
     }
 
-    public virtual void Atack(IDamagable damagable)
-    {
-        AtackBehaviour.Atack(damagable);
-        Atacking?.Invoke();
-    }
-    
-    public virtual void MoveTo(ITarget target)
-    {
-        MovingBehaviour.MoveTo(target);
-        Moving?.Invoke();
-    }
+    protected abstract void InitializeBahaviours();
 
     public virtual void Die()
     {
         DieBehaviour.Die();
-        Dieing?.Invoke();
+        Died?.Invoke();
     }
 
-    public abstract void OnUpdate();
+    public virtual void OnUpdate()
+    {
+        if (IsPaused) return;
+        
+        if (!AtackBehaviour.AtackingStarted)
+        {
+            AtackBehaviour.Atack(GetTarget());
+        }
+    }
 
+    protected abstract ITarget GetTarget();
+
+    public void Pause()
+    {
+        IsPaused = true;
+    }
+
+    public void UnPause()
+    {
+        IsPaused = false;
+    }
 }
 

@@ -57,7 +57,7 @@
      <Compile Include="Assets\Scripts\Entities\IDamagable.cs" />
      <Compile Include="Assets\Scripts\Entities\ITargetContainer.cs" />
      <Compile Include="Assets\Scripts\Container\Item\Items\Stone.cs" />
-     <Compile Include="Assets\Scripts\Player\Interfaces\IPlayer.cs" />
+     <Compile Include="Assets\Scripts\Interact\interfaces\IInteractor.cs" />
      <Compile Include="Assets\Scripts\Enums\VisibilityType.cs" />
      <Compile Include="Assets\Scripts\Extentions\VectorExtentions.cs" />
      <Compile Include="Assets\Scripts\Entities\Enemy\Enemy.cs" />
@@ -69,16 +69,17 @@
      <Compile Include="Assets\Scripts\Extentions\NeighboursExtention.cs" />
      <Compile Include="Assets\Scripts\Entities\EnemySpawner.cs" />
      <Compile Include="Assets\Scripts\Enums\TargetType.cs" />
+     <Compile Include="Assets\Scripts\Building\BuildingStats.cs" />
      <Compile Include="Assets\Scripts\Entities\Behaviours\Atacking\ItemThrowerAtackingBehaviour.cs" />
      <Compile Include="Assets\Scripts\Building\IBuildingsContainer.cs" />
      <Compile Include="Assets\Scripts\Entities\IAtackable.cs" />
      <Compile Include="Assets\Scripts\Container\Item\Items\Wood.cs" />
+     <Compile Include="Assets\Interfaces\ICoroutineHandler.cs" />
      <Compile Include="Assets\Scripts\Enums\Directions\Direction3.cs" />
      <Compile Include="Assets\Scripts\Entities\Behaviours\Moving\TerrestrialEnemyMovingBehaviour.cs" />
      <Compile Include="Assets\Scripts\Building\BuildingWithChilds.cs" />
      <Compile Include="Assets\Scripts\Test\GameOfLifeCellView.cs" />
      <Compile Include="Assets\Scripts\GameField\Views\GameFieldCellView.cs" />
-     <Compile Include="Assets\Scripts\Factories\GameObjectFactory.cs" />
      <Compile Include="Assets\Scripts\PlayerWithWorldInteraction.cs" />
      <Compile Include="Assets\Scripts\Container\Item\Behaviours\Dropable\NonDropableItemBehaviour.cs" />
      <Compile Include="Assets\Scripts\Interact\interfaces\IOpenable.cs" />
@@ -86,6 +87,7 @@
      <Compile Include="Assets\Scripts\Factories\Crafter\CrafterBehaviourFactory.cs" />
      <Compile Include="Assets\Scripts\GameField\GameField.cs" />
      <Compile Include="Assets\Scripts\Extentions\DirectionExtentions.cs" />
+     <Compile Include="Assets\Scripts\Player\PlayerStats.cs" />
      <Compile Include="Assets\Scripts\Crafter\Crafter.cs" />
      <Compile Include="Assets\Interfaces\IRecyclable.cs" />
      <Compile Include="Assets\Scripts\MainUI.cs" />
@@ -98,7 +100,6 @@
      <Compile Include="Assets\Scripts\Building\Builder.cs" />
      <Compile Include="Assets\Scripts\Test\GameOfLife.cs" />
      <Compile Include="Assets\Scripts\Player\Player.cs" />
-     <Compile Include="Assets\Scripts\Entities\Enemy\Enemies\Views\EnemyView.cs" />
      <Compile Include="Assets\Scripts\Crafter\Interfaces\ICrafter.cs" />
      <Compile Include="Assets\Scripts\Building\Building.cs" />
      <Compile Include="Assets\Scripts\Interact\Behaviours\ContainerInteractBehaviour.cs" />
@@ -108,6 +109,7 @@
      <Compile Include="Assets\Scripts\Factories\Building\BuildingPointersFactory.cs" />
      <Compile Include="Assets\Scripts\Container\Models\Cell.cs" />
      <Compile Include="Assets\Scripts\Container\Item\Behaviours\Placeble\PlacebleItemBehaviour.cs" />
+     <Compile Include="Assets\Interfaces\IPausable.cs" />
      <Compile Include="Assets\Scripts\Building\IBuildingContainer.cs" />
      <Compile Include="Assets\Interfaces\IUpdatable.cs" />
      <Compile Include="Assets\Scripts\GameField\Сell.cs" />
@@ -124,8 +126,10 @@
      <Compile Include="Assets\Scripts\Entities\Enemy\EnemyStats.cs" />
      <Compile Include="Assets\Scripts\Building\BuildPoint.cs" />
      <Compile Include="Assets\Scripts\Entities\Behaviours\Diethable\TerrestrialEnemyDiethingBehaviour.cs" />
+     <Compile Include="Assets\Scripts\Entities\PathFinder.cs" />
      <Compile Include="Assets\Scripts\Container\Item\Behaviours\Placeble\NonPlacebleItemBehaviour.cs" />
      <Compile Include="Assets\Scripts\Enums\ItemType.cs" />
+     <Compile Include="Assets\Scripts\Entities\Behaviours\Atacking\TerrestrialEnemyAtackingBehaviour.cs" />
      <Compile Include="Assets\Scripts\Crafter\CrafterBehaviours\FirstTierCrafterBehaviour.cs" />
      <Compile Include="Assets\Scripts\Interact\Behaviours\CrafterInteractBehaviour.cs" />
      <Compile Include="Assets\Scripts\Building\Construction.cs" />
@@ -825,6 +829,14 @@
      </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="NavMeshComponentsEditor.csproj">
+      <Project>{d046b722-0850-13a3-97c2-21f3226bf786}</Project>
+      <Name>NavMeshComponentsEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="NavMeshComponents.csproj">
+      <Project>{704e666e-0a0c-3dae-246f-a7e1704e5c0c}</Project>
+      <Name>NavMeshComponents</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

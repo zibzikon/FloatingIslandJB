@@ -8,7 +8,8 @@ public class Cell
     public event Action Changed;
     public Vector3Int Position { get; }
     public Vector3 WorldPosition => Position * GeneralGameSettings.GameFieldSettings.WorldPositionMultiplier;
-    private Neighbors3<Cell> _neighbours = new();
+    
+    public readonly Neighbors3<Cell> Neighbours = new();
 
     private List<Building> _setedBuildings = new List<Building>();
     public IEnumerable<Building> SetedBuildings => _setedBuildings;
@@ -16,6 +17,8 @@ public class Cell
     public bool IsFilled { get; private set; }
 
     public int Ccapacity { get; private set; } = 100;
+
+    public bool IsBlocked => Ccapacity <= 20;
     
     public Cell(Vector3Int position)
     {
@@ -45,20 +48,20 @@ public class Cell
     
     public static void SetRightLeftNeighbours(Cell right, Cell left)
     {
-        right._neighbours.Left = left;
-        left._neighbours.Right = right;
+        right.Neighbours.Left = left;
+        left.Neighbours.Right = right;
     }
     
     public static void SetFowardBackNeighbours(Cell foward, Cell back)
     {
-        foward._neighbours.Back = back;
-        back._neighbours.Foward = foward;
+        foward.Neighbours.Back = back;
+        back.Neighbours.Foward = foward;
     }
     
     public static void SetUpDownNeighbours(Cell up, Cell down)
     {
-        up._neighbours.Down = down;
-        down._neighbours.Up = up;
+        up.Neighbours.Down = down;
+        down.Neighbours.Up = up;
     }
 }
 

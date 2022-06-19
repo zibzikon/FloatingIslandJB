@@ -1,4 +1,4 @@
 public interface IOpenable
 { 
-    void Open(IPlayer sender);
+    void Open(IInteractor sender);
 }

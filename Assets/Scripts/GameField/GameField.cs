@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Extentions;
 using UnityEngine;
 
 
 public class GameField : MonoBehaviour
 {
+    
     private Cell[,,] _cells;
     public Vector3Int Size = new(10, 10, 10);
     [SerializeField] private GameFieldCellView _cellViewPrefab;
@@ -106,7 +108,7 @@ public class GameField : MonoBehaviour
         return true;
     }
     
-    private Cell GetCellByPosition(Vector3Int position)
+    public Cell GetCellByPosition(Vector3Int position)
     {
         return _cells[position.x, position.y, position.z];
     }

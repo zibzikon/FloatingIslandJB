@@ -79,6 +79,6 @@ public class BuildingWithChilds : Building, IUpdatable, IBuildingContainer
     {
         return BuildingTypesWithChilds.Contains(building.BuildingType);
     }
-    
+
 }
 
